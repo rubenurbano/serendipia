@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0a0e1a">
+<title>Atlas de pueblos · 2.000 a 5.000 habitantes</title>
+
+<style>
+:root {
+  --bg: #0a0e1a;
+  --panel: #0f172a;
+  --panel2: #13213a;
+  --line: #263650;
+  --text: #e8eef8;
+  --muted: #9aabc3;
+  --accent: #77b7ff;
+  --gold: #f0c674;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, Arial, sans-serif;
+  line-height: 1.5;
+}
+
+header {
+  padding: 28px 18px 22px;
+  background: linear-gradient(145deg,#10213c,#0a0e1a 72%);
+  border-bottom: 1px solid var(--line);
+}
+
+.wrap {
+  max-width: 1100px;
+  margin: auto;
+}
+
+.eyebrow {
+  color: var(--accent);
+  font-size: .78rem;
+  letter-spacing: .15em;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+h1 {
+  font-size: clamp(1.65rem,5vw,2.8rem);
+  line-height: 1.08;
+  margin: 10px 0 12px;
+}
+
+.sub {
+  color: var(--muted);
+  max-width: 760px;
+  margin: 0;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  gap: 10px;
+  margin-top: 22px;
+}
+
+.stat {
+  background: #101c30;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 12px;
+}
+
+.stat b {
+  display: block;
+  font-size: 1.45rem;
+  color: var(--gold);
+}
+
+.stat span {
+  font-size: .78rem;
+  color: var(--muted);
+}
+
+main {
+  padding: 20px 16px 80px;
+}
+
+.toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: #0a0e1aee;
+  backdrop-filter: blur(12px);
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.controls {
+  display: flex;
+  gap: 9px;
+  flex-wrap: wrap;
+}
+
+.search {
+  flex: 1;
+  min-width: 210px;
+}
+
+input, select {
+  width: 100%;
+  background: var(--panel);
+  color: var(--text);
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  padding: 12px;
+  font: inherit;
+}
+
+.tabs {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+button {
+  border: 1px solid var(--line);
+  background: var(--panel);
+  color: var(--text);
+  padding: 9px 13px;
+  border-radius: 999px;
+  font: inherit;
+  cursor: pointer;
+}
+
+button.active {
+  background: #18395e;
+  border-color: #3978b9;
+  color: white;
+}
+
+.section-title {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 25px 0 12px;
+}
+
+.section-title h2 {
+  font-size: 1.15rem;
+  margin: 0;
+}
+
+.section-title small {
+  color: var(--muted);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill,minmax(245px,1fr));
+  gap: 11px;
+}
+
+.card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 14px;
+}
+
+.card h3 {
+  font-size: 1rem;
+  margin: 0 0 4px;
+}
+
+.meta {
+  color: var(--muted);
+  font-size: .83rem;
+}
+
+.population {
+  font-size: 1.2rem;
+  font-weight: 750;
+  color: var(--gold);
+  margin: 9px 0;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.actions a {
+  color: var(--accent);
+  font-size: .85rem;
+  text-decoration: none;
+  border: 1px solid #294568;
+  border-radius: 8px;
+  padding: 6px 9px;
+}
+
+.actions a:hover {
+  background: #172b46;
+}
+
+.note {
+  margin-top: 24px;
+  padding: 15px;
+  background: #101b2d;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  color: var(--muted);
+  font-size: .88rem;
+}
+
+footer {
+  padding: 18px;
+  color: var(--muted);
+  font-size: .8rem;
+  border-top: 1px solid var(--line);
+}
+
+@media(max-width:560px) {
+  .stats { grid-template-columns: repeat(2,1fr); }
+  header { padding-top: 22px; }
+  .section-title {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="eyebrow">Atlas municipal · Comunidad Valenciana</div>
+
+    <h1>Pueblos de 2.000 a 5.000 habitantes</h1>
+
+    <p class="sub">
+      Municipios de la Comunidad Valenciana para ampliar
+      la búsqueda de vivienda. Busca por nombre, filtra
+      por provincia y consulta su ubicación.
+    </p>
+
+    <div class="stats">
+      <div class="stat">
+        <b id="total">73</b>
+        <span>Municipios incluidos</span>
+      </div>
+      <div class="stat">
+        <b>2.000–5.000</b>
+        <span>Habitantes</span>
+      </div>
+      <div class="stat">
+        <b>2025</b>
+        <span>Año de referencia previsto</span>
+      </div>
+      <div class="stat">
+        <b>3</b>
+        <span>Provincias</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <div class="toolbar">
+    <div class="controls">
+
+      <div class="search">
+        <input
+          id="q"
+          type="search"
+          placeholder="Buscar un pueblo..."
+          aria-label="Buscar municipio">
+      </div>
+
+      <div style="min-width:155px">
+        <select id="province" aria-label="Filtrar provincia">
+          <option value="">Todas las provincias</option>
+          <option value="Alicante">Alicante</option>
+          <option value="Castellón">Castellón</option>
+          <option value="Valencia">Valencia</option>
+        </select>
+      </div>
+
+      <div style="min-width:135px">
+        <select id="sort" aria-label="Ordenar">
+          <option value="name">Orden alfabético</option>
+          <option value="pop-desc">Más población</option>
+          <option value="pop-asc">Menos población</option>
+        </select>
+      </div>
+
+    </div>
+
+    <div class="tabs">
+      <button class="active" data-tab="">Todos</button>
+      <button data-tab="Alicante">Alicante</button>
+      <button data-tab="Castellón">Castellón</button>
+      <button data-tab="Valencia">Valencia</button>
+    </div>
+  </div>
+
+  <div class="section-title">
+    <h2 id="heading">Todos los municipios</h2>
+    <small id="resultCount">73 resultados</small>
+  </div>
+
+  <div class="grid" id="list"></div>
+
+  <div class="note">
+    <b>Nota sobre los datos:</b>
+    las cifras son una selección preliminar de población municipal.
+    No constituyen una relación oficial exhaustiva. Deben contrastarse
+    con el padrón oficial antes de utilizar el atlas como inventario
+    definitivo. La población municipal no equivale necesariamente
+    a la población del núcleo urbano.
+  </div>
+
+  <div class="note">
+    <b>Cómo utilizar este atlas para buscar vivienda:</b>
+    consulta el ayuntamiento de cada municipio y pregunta por
+    bolsas municipales de vivienda, alquileres disponibles y
+    programas de repoblación. No des por disponible una vivienda
+    simplemente porque el municipio aparezca aquí.
+  </div>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    Atlas de consulta · Archivo HTML autónomo ·
+    Comunidad Valenciana.
+  </div>
+</footer>
+
+<script>
+
+const towns = [
+
+/* ALICANTE */
+
+{name:"Poble Nou de Benitatxell / Benitachell",province:"Alicante",population:4911},
+{name:"Formentera del Segura",province:"Alicante",population:4868},
+{name:"Rafal",province:"Alicante",population:4849},
+{name:"Algorfa",province:"Alicante",population:3788},
+{name:"Busot",province:"Alicante",population:3782},
+{name:"Benijófar",province:"Alicante",population:3679},
+{name:"Biar",province:"Alicante",population:3677},
+{name:"Xaló",province:"Alicante",population:3104},
+{name:"Els Poblets",province:"Alicante",population:2757},
+{name:"Fondó de les Neus / Hondón de las Nieves",province:"Alicante",population:2738},
+{name:"La Romana",province:"Alicante",population:2729},
+{name:"Granja de Rocamora",province:"Alicante",population:2728},
+{name:"Beniarbeig",province:"Alicante",population:2499},
+{name:"Orba",province:"Alicante",population:2399},
+{name:"San Isidro",province:"Alicante",population:2337},
+{name:"Jacarilla",province:"Alicante",population:2176},
+{name:"Benferri",province:"Alicante",population:2099},
+
+/* CASTELLÓN */
+
+{name:"Vilafranca / Villafranca del Cid",province:"Castellón",population:2115},
+{name:"Càlig",province:"Castellón",population:2042},
+{name:"Sant Mateu",province:"Castellón",population:2021},
+
+/* VALENCIA */
+
+{name:"Aielo de Malferit",province:"Valencia",population:4624},
+{name:"Albuixech",province:"Valencia",population:4482},
+{name:"Moixent / Mogente",province:"Valencia",population:4401},
+{name:"Albalat dels Sorells",province:"Valencia",population:4368},
+{name:"Godelleta",province:"Valencia",population:4266},
+{name:"Bocairent",province:"Valencia",population:4130},
+{name:"Bonrepòs i Mirambell",province:"Valencia",population:4115},
+{name:"La Font d'en Carròs",province:"Valencia",population:4020},
+{name:"Gilet",province:"Valencia",population:4011},
+{name:"Villar del Arzobispo",province:"Valencia",population:3862},
+{name:"Montroi / Montroy",province:"Valencia",population:3792},
+{name:"Serra",province:"Valencia",population:3767},
+{name:"La Llosa de Ranes",province:"Valencia",population:3765},
+{name:"Faura",province:"Valencia",population:3753},
+{name:"Alfara del Patriarca",province:"Valencia",population:3740},
+{name:"Vinalesa",province:"Valencia",population:3572},
+{name:"Daimús",province:"Valencia",population:3524},
+{name:"Albalat de la Ribera",province:"Valencia",population:3523},
+{name:"Simat de la Valldigna",province:"Valencia",population:3311},
+{name:"Corbera",province:"Valencia",population:3266},
+{name:"Pedralba",province:"Valencia",population:3225},
+{name:"Casinos",province:"Valencia",population:3153},
+{name:"Piles",province:"Valencia",population:3151},
+{name:"Miramar",province:"Valencia",population:3143},
+{name:"Vallada",province:"Valencia",population:3091},
+{name:"Navarrés",province:"Valencia",population:3027},
+{name:"Catadau",province:"Valencia",population:3005},
+{name:"El Genovés",province:"Valencia",population:2822},
+{name:"Llombai",province:"Valencia",population:2791},
+{name:"Favara",province:"Valencia",population:2776},
+{name:"El Real de Gandia",province:"Valencia",population:2722},
+{name:"Massalfassar",province:"Valencia",population:2716},
+{name:"Almoines",province:"Valencia",population:2664},
+{name:"Anna",province:"Valencia",population:2600},
+{name:"Polinyà de Xúquer",province:"Valencia",population:2577},
+{name:"Manuel",province:"Valencia",population:2560},
+{name:"Olocau",province:"Valencia",population:2534},
+{name:"Real",province:"Valencia",population:2497},
+{name:"Chella",province:"Valencia",population:2452},
+{name:"La Pobla del Duc",province:"Valencia",population:2451},
+{name:"Benissanó",province:"Valencia",population:2449},
+{name:"Agullent",province:"Valencia",population:2438},
+{name:"Xeresa",province:"Valencia",population:2418},
+{name:"Rafelguaraf",province:"Valencia",population:2395},
+{name:"Benifairó de les Valls",province:"Valencia",population:2359},
+{name:"Castelló de Rugat",province:"Valencia",population:2345},
+{name:"Benimodo",province:"Valencia",population:2332},
+{name:"Yátova",province:"Valencia",population:2325},
+{name:"Llutxent",province:"Valencia",population:2314},
+{name:"Loriguilla",province:"Valencia",population:2188},
+{name:"Quatretonda",province:"Valencia",population:2174},
+{name:"Beniparrell",province:"Valencia",population:2108},
+{name:"La Font de la Figuera",province:"Valencia",population:2022}
+
+];
+
+const fmt = n => n.toLocaleString("es-ES");
+
+function render() {
+
+  const query = document
+    .getElementById("q")
+    .value.trim()
+    .toLocaleLowerCase("es");
+
+  const province =
+    document.getElementById("province").value;
+
+  const sort =
+    document.getElementById("sort").value;
+
+  let results = towns.filter(t => {
+
+    const matchesName =
+      t.name.toLocaleLowerCase("es").includes(query);
+
+    const matchesProvince =
+      !province || t.province === province;
+
+    return matchesName && matchesProvince;
+
+  });
+
+  if (sort === "pop-desc") {
+    results.sort((a,b) => b.population-a.population);
+  }
+
+  else if (sort === "pop-asc") {
+    results.sort((a,b) => a.population-b.population);
+  }
+
+  else {
+    results.sort((a,b) =>
+      a.name.localeCompare(b.name,"es")
+    );
+  }
+
+  document.getElementById("heading").textContent =
+    province ? "Municipios de " + province : "Todos los municipios";
+
+  document.getElementById("resultCount").textContent =
+    results.length + " resultados";
+
+  document.getElementById("list").innerHTML =
+    results.map(t => {
+
+      const map =
+        "https://www.google.com/maps/search/?api=1&query=" +
+        encodeURIComponent(t.name + " " + t.province + " España");
+
+      const townSearch =
+        "https://www.google.com/search?q=" +
+        encodeURIComponent("Ayuntamiento " + t.name + " " + t.province);
+
+      return `
+        <article class="card">
+
+          <h3>${t.name}</h3>
+
+          <div class="meta">${t.province}</div>
+
+          <div class="population">
+            ${fmt(t.population)} habitantes
+          </div>
+
+          <div class="actions">
+            <a href="${map}" target="_blank" rel="noopener">
+              Google Maps ↗
+            </a>
+
+            <a href="${townSearch}" target="_blank" rel="noopener">
+              Ayuntamiento ↗
+            </a>
+          </div>
+
+        </article>
+      `;
+
+    }).join("") ||
+    '<div class="card">No hay municipios que coincidan.</div>';
+
+}
+
+document.getElementById("q")
+  .addEventListener("input",render);
+
+document.getElementById("province")
+  .addEventListener("change",() => {
+
+    document.querySelectorAll("[data-tab]")
+      .forEach(b => {
+        b.classList.toggle(
+          "active",
+          b.dataset.tab === document.getElementById("province").value
+        );
+      });
+
+    render();
+  });
+
+document.getElementById("sort")
+  .addEventListener("change",render);
+
+document.querySelectorAll("[data-tab]")
+  .forEach(button => {
+
+    button.addEventListener("click",() => {
+
+      const value = button.dataset.tab;
+
+      document.getElementById("province").value = value;
+
+      document.querySelectorAll("[data-tab]")
+        .forEach(b => b.classList.toggle("active",b===button));
+
+      render();
+
+    });
+
+  });
+
+render();
+
+</script>
+
+</body>
+</html>
