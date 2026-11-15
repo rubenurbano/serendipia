@@ -1,565 +1,203 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#0a0e1a">
-<title>Atlas de pueblos · 2.000 a 5.000 habitantes</title>
-
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#07111f">
+<title>Pueblos de 2.000 a 5.000 habitantes · Atlas CV · Rubén Sbarsky</title>
 <style>
-:root {
-  --bg: #0a0e1a;
-  --panel: #0f172a;
-  --panel2: #13213a;
-  --line: #263650;
-  --text: #e8eef8;
-  --muted: #9aabc3;
-  --accent: #77b7ff;
-  --gold: #f0c674;
-}
 
-* { box-sizing: border-box; }
+:root{--bg:#07111f;--panel:#101e30;--panel2:#14263b;--line:#263b53;--ink:#f2f6fb;--muted:#9fb0c3;--lime:#c8f169;--cyan:#63d9e8;--orange:#ff9d5c;--shadow:0 18px 55px #0007}
+*{box-sizing:border-box}html{scroll-behavior:smooth;background:var(--bg)}body{margin:0;background:radial-gradient(ellipse at 85% 0%,#173b55 0,transparent 38%),linear-gradient(180deg,#07111f,#091625 55%,#07111f);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;min-height:100vh}
+button,input{font:inherit}button{cursor:pointer}
+.top-shell{position:sticky;top:0;z-index:20;background:#07111feF;border-bottom:1px solid #ffffff17;backdrop-filter:blur(18px);padding-top:env(safe-area-inset-top)}
+.topline{height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;max-width:1100px;margin:auto}
+.brand{font-size:12px;font-weight:900;letter-spacing:.16em;color:var(--lime)}.top-actions{display:flex;gap:8px}
+.iconbtn{border:1px solid var(--line);color:var(--ink);background:#122238;border-radius:12px;padding:8px 11px;font-size:12px;font-weight:800}
+.tabs{display:flex;gap:7px;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:none;padding:0 12px 11px;max-width:1100px;margin:auto}.tabs::-webkit-scrollbar{display:none}
+.tab{flex:0 0 auto;border:1px solid transparent;background:transparent;color:#9fb0c3;padding:10px 14px;border-radius:999px;font-size:12px;font-weight:850;letter-spacing:.04em;white-space:nowrap}
+.tab.active{background:var(--lime);color:#15210b;border-color:var(--lime);box-shadow:0 5px 22px #c8f16933}
+main{max-width:960px;margin:0 auto;padding:26px 16px 120px}
+.panel{display:none;animation:enter .28s ease}.panel.active{display:block}@keyframes enter{from{opacity:.3;transform:translateY(8px)}to{opacity:1;transform:none}}
+.eyebrow{color:var(--cyan);font-size:11px;font-weight:900;letter-spacing:.2em;text-transform:uppercase;margin:0 0 12px}
+h1{font-size:clamp(36px,9vw,76px);line-height:.98;letter-spacing:-.065em;margin:0 0 18px;font-weight:950;max-width:850px}
+h1 .accent{color:var(--lime)}h2{font-size:clamp(27px,6vw,44px);letter-spacing:-.045em;margin:0 0 8px}h3{margin:0 0 10px}
+.lead{color:#c3d0dd;font-size:16px;line-height:1.65;max-width:670px}
+.hero{position:relative;overflow:hidden;padding:30px 24px;border:1px solid #ffffff1b;border-radius:26px;background:linear-gradient(135deg,#132b43eF,#0d1b2b 70%);box-shadow:var(--shadow)}
+.hero:after{content:"218";position:absolute;right:-12px;bottom:-44px;font-size:clamp(110px,27vw,240px);font-weight:1000;letter-spacing:-.1em;color:#ffffff08;pointer-events:none}
+.hero-content{position:relative;z-index:1}.hero .sub{font-size:12px;letter-spacing:.15em;color:var(--muted);font-weight:850;text-transform:uppercase}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:18px 0 0}
+.stat{padding:15px 12px;border:1px solid #ffffff16;border-radius:16px;background:#ffffff08}.stat strong{display:block;font-size:30px;letter-spacing:-.06em;color:var(--lime)}.stat span{font-size:11px;color:var(--muted);font-weight:750}
+.callout{border-left:3px solid var(--orange);padding:13px 15px;margin:22px 0;background:#ff9d5c10;color:#d5dfeb;line-height:1.55;border-radius:0 12px 12px 0}
+.section-head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin:4px 0 20px}.count{font-size:12px;color:var(--lime);font-weight:900;white-space:nowrap}
+.search-wrap{position:relative;margin:18px 0 14px}.search-wrap input{width:100%;background:#0e1d2d;border:1px solid var(--line);border-radius:14px;padding:14px 15px 14px 42px;color:var(--ink);outline:none}.search-wrap input:focus{border-color:var(--cyan);box-shadow:0 0 0 3px #63d9e822}.search-wrap:before{content:"⌕";position:absolute;left:15px;top:7px;font-size:25px;color:var(--cyan)}
+.hint{font-size:11px;color:var(--muted);margin:0 0 12px}
+.town-list{display:grid;gap:9px}.town{display:flex;align-items:center;justify-content:space-between;gap:12px;background:linear-gradient(110deg,#12243a,#0d1b2a);border:1px solid #ffffff12;border-radius:15px;padding:13px 12px 13px 15px;min-width:0}.town-main{min-width:0}.town-name{font-size:14px;font-weight:850;overflow-wrap:anywhere}.town-meta{font-size:11px;color:var(--muted);margin-top:4px}.town-meta b{color:var(--lime);font-variant-numeric:tabular-nums}
+.mapbtn{flex:0 0 auto;text-decoration:none;color:#101b0b;background:var(--lime);border-radius:11px;padding:10px 11px;font-size:10px;line-height:1.15;font-weight:950;text-align:center;max-width:112px;box-shadow:0 5px 15px #c8f1691c}.mapbtn:active{transform:scale(.97)}
+.empty{display:none;padding:22px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:14px}
+.sources{display:grid;gap:12px}.source-card{background:#102137;border:1px solid #ffffff16;border-radius:16px;padding:16px}.source-card p{font-size:13px;color:#c3d0dd;line-height:1.55;margin:0 0 12px;overflow-wrap:anywhere}
+.source-actions{display:flex;gap:8px;flex-wrap:wrap}.source-actions a{font-size:11px}
+.nav-footer{display:flex;gap:10px;margin-top:30px;padding-top:18px;border-top:1px solid #ffffff18}.nav-footer button{flex:1;border:1px solid var(--line);border-radius:14px;padding:14px 12px;background:#12243a;color:var(--ink);font-weight:850;font-size:12px}.nav-footer button.next{background:var(--lime);border-color:var(--lime);color:#16220c}.nav-footer button:disabled{opacity:.25;cursor:default}
+#drawer{position:fixed;inset:0;z-index:50;display:none;background:#020812c9;backdrop-filter:blur(7px)}#drawer.open{display:block}.drawer-sheet{position:absolute;top:0;right:0;height:100%;width:min(88vw,390px);overflow:auto;background:#0c1a2a;border-left:1px solid #ffffff20;padding:22px 18px calc(30px + env(safe-area-inset-bottom));box-shadow:var(--shadow)}.drawer-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}.drawer-head strong{font-size:20px}.drawer-link{width:100%;display:flex;justify-content:space-between;align-items:center;text-align:left;border:1px solid #ffffff13;background:#12243a;color:var(--ink);padding:14px;border-radius:13px;margin:8px 0;font-weight:800}.drawer-link small{color:var(--muted);font-weight:600}
+.floats{position:fixed;right:12px;bottom:calc(18px + env(safe-area-inset-bottom));z-index:35;display:grid;gap:9px;touch-action:none}.float-btn{border:1px solid #ffffff30;border-radius:999px;background:#c8f169;color:#14200b;font-size:11px;font-weight:950;padding:12px 14px;box-shadow:0 8px 24px #0008;min-width:82px;touch-action:none;user-select:none}.float-btn.up{background:#63d9e8;color:#071723}
+.credits{text-align:center;padding:42px 12px;border:1px solid #ffffff18;border-radius:24px;background:linear-gradient(145deg,#132a42,#0d1928)}.credits .name{font-size:clamp(28px,8vw,48px);font-weight:950;letter-spacing:-.05em;color:var(--lime)}.credits p{color:#c2cfdd;line-height:1.8}
+@media(min-width:700px){main{padding-top:42px}.town-list{grid-template-columns:repeat(2,minmax(0,1fr))}.town{min-height:76px}.hero{padding:48px}.tabs{padding-left:20px}.topline{padding:0 20px}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
 
-body {
-  margin: 0;
-  background: var(--bg);
-  color: var(--text);
-  font-family: system-ui, Arial, sans-serif;
-  line-height: 1.5;
-}
-
-header {
-  padding: 28px 18px 22px;
-  background: linear-gradient(145deg,#10213c,#0a0e1a 72%);
-  border-bottom: 1px solid var(--line);
-}
-
-.wrap {
-  max-width: 1100px;
-  margin: auto;
-}
-
-.eyebrow {
-  color: var(--accent);
-  font-size: .78rem;
-  letter-spacing: .15em;
-  font-weight: 700;
-  text-transform: uppercase;
-}
-
-h1 {
-  font-size: clamp(1.65rem,5vw,2.8rem);
-  line-height: 1.08;
-  margin: 10px 0 12px;
-}
-
-.sub {
-  color: var(--muted);
-  max-width: 760px;
-  margin: 0;
-}
-
-.stats {
-  display: grid;
-  grid-template-columns: repeat(4,1fr);
-  gap: 10px;
-  margin-top: 22px;
-}
-
-.stat {
-  background: #101c30;
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  padding: 12px;
-}
-
-.stat b {
-  display: block;
-  font-size: 1.45rem;
-  color: var(--gold);
-}
-
-.stat span {
-  font-size: .78rem;
-  color: var(--muted);
-}
-
-main {
-  padding: 20px 16px 80px;
-}
-
-.toolbar {
-  position: sticky;
-  top: 0;
-  z-index: 5;
-  background: #0a0e1aee;
-  backdrop-filter: blur(12px);
-  padding: 12px 0;
-  border-bottom: 1px solid var(--line);
-}
-
-.controls {
-  display: flex;
-  gap: 9px;
-  flex-wrap: wrap;
-}
-
-.search {
-  flex: 1;
-  min-width: 210px;
-}
-
-input, select {
-  width: 100%;
-  background: var(--panel);
-  color: var(--text);
-  border: 1px solid var(--line);
-  border-radius: 11px;
-  padding: 12px;
-  font: inherit;
-}
-
-.tabs {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  margin-top: 10px;
-}
-
-button {
-  border: 1px solid var(--line);
-  background: var(--panel);
-  color: var(--text);
-  padding: 9px 13px;
-  border-radius: 999px;
-  font: inherit;
-  cursor: pointer;
-}
-
-button.active {
-  background: #18395e;
-  border-color: #3978b9;
-  color: white;
-}
-
-.section-title {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 12px;
-  margin: 25px 0 12px;
-}
-
-.section-title h2 {
-  font-size: 1.15rem;
-  margin: 0;
-}
-
-.section-title small {
-  color: var(--muted);
-}
-
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill,minmax(245px,1fr));
-  gap: 11px;
-}
-
-.card {
-  background: var(--panel);
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  padding: 14px;
-}
-
-.card h3 {
-  font-size: 1rem;
-  margin: 0 0 4px;
-}
-
-.meta {
-  color: var(--muted);
-  font-size: .83rem;
-}
-
-.population {
-  font-size: 1.2rem;
-  font-weight: 750;
-  color: var(--gold);
-  margin: 9px 0;
-}
-
-.actions {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.actions a {
-  color: var(--accent);
-  font-size: .85rem;
-  text-decoration: none;
-  border: 1px solid #294568;
-  border-radius: 8px;
-  padding: 6px 9px;
-}
-
-.actions a:hover {
-  background: #172b46;
-}
-
-.note {
-  margin-top: 24px;
-  padding: 15px;
-  background: #101b2d;
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  color: var(--muted);
-  font-size: .88rem;
-}
-
-footer {
-  padding: 18px;
-  color: var(--muted);
-  font-size: .8rem;
-  border-top: 1px solid var(--line);
-}
-
-@media(max-width:560px) {
-  .stats { grid-template-columns: repeat(2,1fr); }
-  header { padding-top: 22px; }
-  .section-title {
-    align-items: flex-start;
-    flex-direction: column;
-  }
-}
+.province-tools{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:16px 0 12px}
+.province-tools select{background:#0e1d2d;border:1px solid var(--line);border-radius:12px;color:var(--ink);padding:11px 12px;min-width:170px}
+.town-actions{display:flex;gap:7px;flex:0 0 auto;flex-wrap:wrap;justify-content:flex-end}
+.town-actions .mapbtn{max-width:none}
+.town-actions .secondary{background:#14263b;color:var(--cyan);border:1px solid var(--line);box-shadow:none}
+.stat strong{font-size:clamp(22px,5vw,30px)}
+@media(max-width:430px){.town{align-items:flex-start}.town-actions{flex-direction:column}.town-actions .mapbtn{min-width:82px}}
 </style>
 </head>
-
 <body>
-
-<header>
-  <div class="wrap">
-    <div class="eyebrow">Atlas municipal · Comunidad Valenciana</div>
-
-    <h1>Pueblos de 2.000 a 5.000 habitantes</h1>
-
-    <p class="sub">
-      Municipios de la Comunidad Valenciana para ampliar
-      la búsqueda de vivienda. Busca por nombre, filtra
-      por provincia y consulta su ubicación.
-    </p>
-
-    <div class="stats">
-      <div class="stat">
-        <b id="total">73</b>
-        <span>Municipios incluidos</span>
-      </div>
-      <div class="stat">
-        <b>2.000–5.000</b>
-        <span>Habitantes</span>
-      </div>
-      <div class="stat">
-        <b>2025</b>
-        <span>Año de referencia previsto</span>
-      </div>
-      <div class="stat">
-        <b>3</b>
-        <span>Provincias</span>
-      </div>
-    </div>
+<header class="top-shell">
+  <div class="topline">
+    <div class="brand">ATLAS · CV</div>
+    <div class="top-actions"><button class="iconbtn" id="indexBtn" aria-label="Abrir índice">☰ ÍNDICE</button></div>
   </div>
+  <nav class="tabs" id="tabs" aria-label="Secciones">
+    <button class="tab active" data-go="inicio">INICIO</button>
+    <button class="tab" data-go="alicante">ALICANTE</button>
+    <button class="tab" data-go="castellon">CASTELLÓN</button>
+    <button class="tab" data-go="valencia">VALENCIA</button>
+    <button class="tab" data-go="fuentes">FUENTES</button>
+    <button class="tab" data-go="creditos">CRÉDITOS</button>
+  </nav>
 </header>
 
-<main class="wrap">
-
-  <div class="toolbar">
-    <div class="controls">
-
-      <div class="search">
-        <input
-          id="q"
-          type="search"
-          placeholder="Buscar un pueblo..."
-          aria-label="Buscar municipio">
-      </div>
-
-      <div style="min-width:155px">
-        <select id="province" aria-label="Filtrar provincia">
-          <option value="">Todas las provincias</option>
-          <option value="Alicante">Alicante</option>
-          <option value="Castellón">Castellón</option>
-          <option value="Valencia">Valencia</option>
-        </select>
-      </div>
-
-      <div style="min-width:135px">
-        <select id="sort" aria-label="Ordenar">
-          <option value="name">Orden alfabético</option>
-          <option value="pop-desc">Más población</option>
-          <option value="pop-asc">Menos población</option>
-        </select>
-      </div>
-
+<main>
+<section class="panel active" id="inicio">
+  <p class="eyebrow">Explorador municipal · Referencia 2025</p>
+  <div class="hero"><div class="hero-content">
+    <div class="sub">Comunidad Valenciana</div>
+    <h1>Pueblos de <span class="accent">2.000 a 5.000</span> habitantes</h1>
+    <p class="lead">Un catálogo para ampliar la búsqueda de vivienda por el territorio valenciano. Explora los municipios por provincia, busca por nombre y abre su ubicación o la información de su ayuntamiento.</p>
+    <div class="stats">
+      <div class="stat"><strong>17</strong><span>ALICANTE</span></div>
+      <div class="stat"><strong>3</strong><span>CASTELLÓN</span></div>
+      <div class="stat"><strong>53</strong><span>VALENCIA</span></div>
     </div>
+  </div></div>
+  <div class="callout"><b>Qué incluye este atlas</b><br>Municipios de la Comunidad Valenciana incluidos en el listado original, con cifras de población de referencia 2025. La población municipal no equivale necesariamente a la población del núcleo urbano.</div>
+  <p class="lead">Entra en cada provincia desde las pestañas superiores o abre el ÍNDICE para saltar directamente a cualquier sección. Dentro de cada provincia puedes buscar y ordenar los municipios.</p>
+</section>
 
-    <div class="tabs">
-      <button class="active" data-tab="">Todos</button>
-      <button data-tab="Alicante">Alicante</button>
-      <button data-tab="Castellón">Castellón</button>
-      <button data-tab="Valencia">Valencia</button>
-    </div>
+<section class="panel" id="alicante">
+  <div class="section-head"><div><p class="eyebrow">Costa Blanca · Interior</p><h2>Provincia de Alicante</h2></div><span class="count" id="count-alicante"></span></div>
+  <div class="search-wrap"><input type="search" class="filter" data-province="Alicante" placeholder="Buscar municipio…" aria-label="Buscar en Alicante"></div>
+  <div class="province-tools"><select class="sort" data-province="Alicante" aria-label="Ordenar municipios"><option value="original">Orden del listado</option><option value="name">Orden alfabético</option><option value="high">Más población primero</option><option value="low">Menos población primero</option></select></div>
+  <p class="hint">Cifras del listado de referencia · Cada municipio incluye acceso a Google Maps y búsqueda de su ayuntamiento.</p>
+  <div class="town-list" data-list="Alicante"></div><div class="empty">No hay municipios que coincidan con la búsqueda.</div>
+</section>
+
+<section class="panel" id="castellon">
+  <div class="section-head"><div><p class="eyebrow">Maestrat · Els Ports · Espadà</p><h2>Provincia de Castellón</h2></div><span class="count" id="count-castellon"></span></div>
+  <div class="search-wrap"><input type="search" class="filter" data-province="Castellón" placeholder="Buscar municipio…" aria-label="Buscar en Castellón"></div>
+  <div class="province-tools"><select class="sort" data-province="Castellón" aria-label="Ordenar municipios"><option value="original">Orden del listado</option><option value="name">Orden alfabético</option><option value="high">Más población primero</option><option value="low">Menos población primero</option></select></div>
+  <p class="hint">Cifras del listado de referencia · Cada municipio incluye acceso a Google Maps y búsqueda de su ayuntamiento.</p>
+  <div class="town-list" data-list="Castellón"></div><div class="empty">No hay municipios que coincidan con la búsqueda.</div>
+</section>
+
+<section class="panel" id="valencia">
+  <div class="section-head"><div><p class="eyebrow">Rincón de Ademuz · Serranía · Safor</p><h2>Provincia de Valencia</h2></div><span class="count" id="count-valencia"></span></div>
+  <div class="search-wrap"><input type="search" class="filter" data-province="Valencia" placeholder="Buscar municipio…" aria-label="Buscar en Valencia"></div>
+  <div class="province-tools"><select class="sort" data-province="Valencia" aria-label="Ordenar municipios"><option value="original">Orden del listado</option><option value="name">Orden alfabético</option><option value="high">Más población primero</option><option value="low">Menos población primero</option></select></div>
+  <p class="hint">Cifras del listado de referencia · Cada municipio incluye acceso a Google Maps y búsqueda de su ayuntamiento.</p>
+  <div class="town-list" data-list="Valencia"></div><div class="empty">No hay municipios que coincidan con la búsqueda.</div>
+</section>
+
+<section class="panel" id="fuentes">
+  <p class="eyebrow">Trazabilidad · Referencias</p><h2>Fuentes y criterios</h2>
+  <p class="lead">Este archivo conserva las cifras y los municipios del listado de origen. La relación debe considerarse una selección preliminar, no un inventario oficial exhaustivo.</p>
+  <div class="callout"><b>Nota sobre los datos</b><br>Las cifras son una selección preliminar de población municipal. Deben contrastarse con el padrón oficial antes de utilizar el atlas como inventario definitivo. La población municipal no equivale necesariamente a la población del núcleo urbano.</div>
+  <div class="sources">
+    <article class="source-card"><h3>INE · Instituto Nacional de Estadística</h3><p>Fuente oficial para consultar las cifras de población de los municipios españoles y comprobar los datos más recientes.</p><div class="source-actions"><a class="mapbtn" href="https://www.ine.es/" target="_blank" rel="noopener noreferrer">CONSULTAR INE ↗</a></div></article>
+    <article class="source-card"><h3>Listados municipales · Alicante</h3><p>Consulta provincial de municipios de Alicante.</p><div class="source-actions"><a class="mapbtn" href="https://inevisual.es/municipios/provincia/alicante-alacant" target="_blank" rel="noopener noreferrer">ABRIR LISTADO ↗</a></div></article>
+    <article class="source-card"><h3>Listados municipales · Castellón</h3><p>Consulta provincial de municipios de Castellón.</p><div class="source-actions"><a class="mapbtn" href="https://inevisual.es/municipios/provincia/castellon-castello" target="_blank" rel="noopener noreferrer">ABRIR LISTADO ↗</a></div></article>
+    <article class="source-card"><h3>Listados municipales · Valencia</h3><p>Consulta provincial de municipios de Valencia.</p><div class="source-actions"><a class="mapbtn" href="https://inevisual.es/municipios/provincia/valencia-valencia" target="_blank" rel="noopener noreferrer">ABRIR LISTADO ↗</a></div></article>
+    <article class="source-card"><h3>Institut Cartogràfic Valencià</h3><p>Cartografía y referencia territorial de la Comunidad Valenciana.</p><div class="source-actions"><a class="mapbtn" href="https://icv.gva.es/" target="_blank" rel="noopener noreferrer">ABRIR ICV ↗</a></div></article>
   </div>
+  <div class="callout">Para buscar vivienda, contacta directamente con cada ayuntamiento y pregunta por alquileres disponibles, bolsas municipales de vivienda y programas de repoblación. La inclusión de un municipio en este atlas no significa que haya viviendas disponibles.</div>
+</section>
 
-  <div class="section-title">
-    <h2 id="heading">Todos los municipios</h2>
-    <small id="resultCount">73 resultados</small>
-  </div>
+<section class="panel" id="creditos">
+  <p class="eyebrow">Ficha de edición</p><h2>Créditos</h2>
+  <div class="credits"><div class="name">Rubén Sbarsky</div><p>Atlas municipal · Comunidad Valenciana</p><p>Pueblos de 2.000 a 5.000 habitantes<br>Listado de referencia 2025</p><p>Archivo HTML autónomo · Diseño adaptable a móviles</p></div>
+</section>
 
-  <div class="grid" id="list"></div>
-
-  <div class="note">
-    <b>Nota sobre los datos:</b>
-    las cifras son una selección preliminar de población municipal.
-    No constituyen una relación oficial exhaustiva. Deben contrastarse
-    con el padrón oficial antes de utilizar el atlas como inventario
-    definitivo. La población municipal no equivale necesariamente
-    a la población del núcleo urbano.
-  </div>
-
-  <div class="note">
-    <b>Cómo utilizar este atlas para buscar vivienda:</b>
-    consulta el ayuntamiento de cada municipio y pregunta por
-    bolsas municipales de vivienda, alquileres disponibles y
-    programas de repoblación. No des por disponible una vivienda
-    simplemente porque el municipio aparezca aquí.
-  </div>
-
+<div class="nav-footer" id="navFooter"><button id="prevBtn">← ANTERIOR</button><button class="next" id="nextBtn">SIGUIENTE →</button></div>
 </main>
 
-<footer>
-  <div class="wrap">
-    Atlas de consulta · Archivo HTML autónomo ·
-    Comunidad Valenciana.
-  </div>
-</footer>
+<div id="drawer" role="dialog" aria-modal="true" aria-label="Índice de secciones">
+  <div class="drawer-sheet"><div class="drawer-head"><strong>ÍNDICE</strong><button class="iconbtn" id="closeDrawer">✕ CERRAR</button></div><div id="drawerLinks"></div></div>
+</div>
+<div class="floats" id="floats"><button class="float-btn" id="homeFloat" title="Ir a Inicio">⌂ INICIO</button><button class="float-btn up" id="upFloat" title="Ir al comienzo de esta pestaña">↑ ARRIBA</button></div>
 
 <script>
-
-const towns = [
-
-/* ALICANTE */
-
-{name:"Poble Nou de Benitatxell / Benitachell",province:"Alicante",population:4911},
-{name:"Formentera del Segura",province:"Alicante",population:4868},
-{name:"Rafal",province:"Alicante",population:4849},
-{name:"Algorfa",province:"Alicante",population:3788},
-{name:"Busot",province:"Alicante",population:3782},
-{name:"Benijófar",province:"Alicante",population:3679},
-{name:"Biar",province:"Alicante",population:3677},
-{name:"Xaló",province:"Alicante",population:3104},
-{name:"Els Poblets",province:"Alicante",population:2757},
-{name:"Fondó de les Neus / Hondón de las Nieves",province:"Alicante",population:2738},
-{name:"La Romana",province:"Alicante",population:2729},
-{name:"Granja de Rocamora",province:"Alicante",population:2728},
-{name:"Beniarbeig",province:"Alicante",population:2499},
-{name:"Orba",province:"Alicante",population:2399},
-{name:"San Isidro",province:"Alicante",population:2337},
-{name:"Jacarilla",province:"Alicante",population:2176},
-{name:"Benferri",province:"Alicante",population:2099},
-
-/* CASTELLÓN */
-
-{name:"Vilafranca / Villafranca del Cid",province:"Castellón",population:2115},
-{name:"Càlig",province:"Castellón",population:2042},
-{name:"Sant Mateu",province:"Castellón",population:2021},
-
-/* VALENCIA */
-
-{name:"Aielo de Malferit",province:"Valencia",population:4624},
-{name:"Albuixech",province:"Valencia",population:4482},
-{name:"Moixent / Mogente",province:"Valencia",population:4401},
-{name:"Albalat dels Sorells",province:"Valencia",population:4368},
-{name:"Godelleta",province:"Valencia",population:4266},
-{name:"Bocairent",province:"Valencia",population:4130},
-{name:"Bonrepòs i Mirambell",province:"Valencia",population:4115},
-{name:"La Font d'en Carròs",province:"Valencia",population:4020},
-{name:"Gilet",province:"Valencia",population:4011},
-{name:"Villar del Arzobispo",province:"Valencia",population:3862},
-{name:"Montroi / Montroy",province:"Valencia",population:3792},
-{name:"Serra",province:"Valencia",population:3767},
-{name:"La Llosa de Ranes",province:"Valencia",population:3765},
-{name:"Faura",province:"Valencia",population:3753},
-{name:"Alfara del Patriarca",province:"Valencia",population:3740},
-{name:"Vinalesa",province:"Valencia",population:3572},
-{name:"Daimús",province:"Valencia",population:3524},
-{name:"Albalat de la Ribera",province:"Valencia",population:3523},
-{name:"Simat de la Valldigna",province:"Valencia",population:3311},
-{name:"Corbera",province:"Valencia",population:3266},
-{name:"Pedralba",province:"Valencia",population:3225},
-{name:"Casinos",province:"Valencia",population:3153},
-{name:"Piles",province:"Valencia",population:3151},
-{name:"Miramar",province:"Valencia",population:3143},
-{name:"Vallada",province:"Valencia",population:3091},
-{name:"Navarrés",province:"Valencia",population:3027},
-{name:"Catadau",province:"Valencia",population:3005},
-{name:"El Genovés",province:"Valencia",population:2822},
-{name:"Llombai",province:"Valencia",population:2791},
-{name:"Favara",province:"Valencia",population:2776},
-{name:"El Real de Gandia",province:"Valencia",population:2722},
-{name:"Massalfassar",province:"Valencia",population:2716},
-{name:"Almoines",province:"Valencia",population:2664},
-{name:"Anna",province:"Valencia",population:2600},
-{name:"Polinyà de Xúquer",province:"Valencia",population:2577},
-{name:"Manuel",province:"Valencia",population:2560},
-{name:"Olocau",province:"Valencia",population:2534},
-{name:"Real",province:"Valencia",population:2497},
-{name:"Chella",province:"Valencia",population:2452},
-{name:"La Pobla del Duc",province:"Valencia",population:2451},
-{name:"Benissanó",province:"Valencia",population:2449},
-{name:"Agullent",province:"Valencia",population:2438},
-{name:"Xeresa",province:"Valencia",population:2418},
-{name:"Rafelguaraf",province:"Valencia",population:2395},
-{name:"Benifairó de les Valls",province:"Valencia",population:2359},
-{name:"Castelló de Rugat",province:"Valencia",population:2345},
-{name:"Benimodo",province:"Valencia",population:2332},
-{name:"Yátova",province:"Valencia",population:2325},
-{name:"Llutxent",province:"Valencia",population:2314},
-{name:"Loriguilla",province:"Valencia",population:2188},
-{name:"Quatretonda",province:"Valencia",population:2174},
-{name:"Beniparrell",province:"Valencia",population:2108},
-{name:"La Font de la Figuera",province:"Valencia",population:2022}
-
+const DATA = {"Alicante":[{"name":"Poble Nou de Benitatxell / Benitachell","population":4911},{"name":"Formentera del Segura","population":4868},{"name":"Rafal","population":4849},{"name":"Algorfa","population":3788},{"name":"Busot","population":3782},{"name":"Benijófar","population":3679},{"name":"Biar","population":3677},{"name":"Xaló","population":3104},{"name":"Els Poblets","population":2757},{"name":"Fondó de les Neus / Hondón de las Nieves","population":2738},{"name":"La Romana","population":2729},{"name":"Granja de Rocamora","population":2728},{"name":"Beniarbeig","population":2499},{"name":"Orba","population":2399},{"name":"San Isidro","population":2337},{"name":"Jacarilla","population":2176},{"name":"Benferri","population":2099}],"Castellón":[{"name":"Vilafranca / Villafranca del Cid","population":2115},{"name":"Càlig","population":2042},{"name":"Sant Mateu","population":2021}],"Valencia":[{"name":"Aielo de Malferit","population":4624},{"name":"Albuixech","population":4482},{"name":"Moixent / Mogente","population":4401},{"name":"Albalat dels Sorells","population":4368},{"name":"Godelleta","population":4266},{"name":"Bocairent","population":4130},{"name":"Bonrepòs i Mirambell","population":4115},{"name":"La Font d'en Carròs","population":4020},{"name":"Gilet","population":4011},{"name":"Villar del Arzobispo","population":3862},{"name":"Montroi / Montroy","population":3792},{"name":"Serra","population":3767},{"name":"La Llosa de Ranes","population":3765},{"name":"Faura","population":3753},{"name":"Alfara del Patriarca","population":3740},{"name":"Vinalesa","population":3572},{"name":"Daimús","population":3524},{"name":"Albalat de la Ribera","population":3523},{"name":"Simat de la Valldigna","population":3311},{"name":"Corbera","population":3266},{"name":"Pedralba","population":3225},{"name":"Casinos","population":3153},{"name":"Piles","population":3151},{"name":"Miramar","population":3143},{"name":"Vallada","population":3091},{"name":"Navarrés","population":3027},{"name":"Catadau","population":3005},{"name":"El Genovés","population":2822},{"name":"Llombai","population":2791},{"name":"Favara","population":2776},{"name":"El Real de Gandia","population":2722},{"name":"Massalfassar","population":2716},{"name":"Almoines","population":2664},{"name":"Anna","population":2600},{"name":"Polinyà de Xúquer","population":2577},{"name":"Manuel","population":2560},{"name":"Olocau","population":2534},{"name":"Real","population":2497},{"name":"Chella","population":2452},{"name":"La Pobla del Duc","population":2451},{"name":"Benissanó","population":2449},{"name":"Agullent","population":2438},{"name":"Xeresa","population":2418},{"name":"Rafelguaraf","population":2395},{"name":"Benifairó de les Valls","population":2359},{"name":"Castelló de Rugat","population":2345},{"name":"Benimodo","population":2332},{"name":"Yátova","population":2325},{"name":"Llutxent","population":2314},{"name":"Loriguilla","population":2188},{"name":"Quatretonda","population":2174},{"name":"Beniparrell","population":2108},{"name":"La Font de la Figuera","population":2022}]};
+const SECTIONS = [
+  ["inicio","INICIO"],["alicante","ALICANTE"],["castellon","CASTELLÓN"],
+  ["valencia","VALENCIA"],["fuentes","FUENTES"],["creditos","CRÉDITOS"]
 ];
-
+let current = "inicio";
 const fmt = n => n.toLocaleString("es-ES");
+const slug = p => p.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
 
-function render() {
-
-  const query = document
-    .getElementById("q")
-    .value.trim()
-    .toLocaleLowerCase("es");
-
-  const province =
-    document.getElementById("province").value;
-
-  const sort =
-    document.getElementById("sort").value;
-
-  let results = towns.filter(t => {
-
-    const matchesName =
-      t.name.toLocaleLowerCase("es").includes(query);
-
-    const matchesProvince =
-      !province || t.province === province;
-
-    return matchesName && matchesProvince;
-
-  });
-
-  if (sort === "pop-desc") {
-    results.sort((a,b) => b.population-a.population);
-  }
-
-  else if (sort === "pop-asc") {
-    results.sort((a,b) => a.population-b.population);
-  }
-
-  else {
-    results.sort((a,b) =>
-      a.name.localeCompare(b.name,"es")
-    );
-  }
-
-  document.getElementById("heading").textContent =
-    province ? "Municipios de " + province : "Todos los municipios";
-
-  document.getElementById("resultCount").textContent =
-    results.length + " resultados";
-
-  document.getElementById("list").innerHTML =
-    results.map(t => {
-
-      const map =
-        "https://www.google.com/maps/search/?api=1&query=" +
-        encodeURIComponent(t.name + " " + t.province + " España");
-
-      const townSearch =
-        "https://www.google.com/search?q=" +
-        encodeURIComponent("Ayuntamiento " + t.name + " " + t.province);
-
-      return `
-        <article class="card">
-
-          <h3>${t.name}</h3>
-
-          <div class="meta">${t.province}</div>
-
-          <div class="population">
-            ${fmt(t.population)} habitantes
-          </div>
-
-          <div class="actions">
-            <a href="${map}" target="_blank" rel="noopener">
-              Google Maps ↗
-            </a>
-
-            <a href="${townSearch}" target="_blank" rel="noopener">
-              Ayuntamiento ↗
-            </a>
-          </div>
-
-        </article>
-      `;
-
-    }).join("") ||
-    '<div class="card">No hay municipios que coincidan.</div>';
-
+function renderProvince(province) {
+  const section = document.getElementById(province === "Castellón" ? "castellon" : province.toLowerCase());
+  const query = section.querySelector(".filter").value.trim().toLocaleLowerCase("es");
+  const sort = section.querySelector(".sort").value;
+  let rows = DATA[province].filter(t => t.name.toLocaleLowerCase("es").includes(query));
+  if (sort === "name") rows.sort((a,b) => a.name.localeCompare(b.name,"es"));
+  if (sort === "high") rows.sort((a,b) => b.population-a.population);
+  if (sort === "low") rows.sort((a,b) => a.population-b.population);
+  const list = section.querySelector(".town-list");
+  list.innerHTML = rows.map(t => {
+    const map = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(t.name + ", provincia de " + province + ", Comunidad Valenciana, España");
+    const council = "https://www.google.com/search?q=" + encodeURIComponent("Ayuntamiento " + t.name + " " + province);
+    return `<article class="town"><div class="town-main"><div class="town-name">${t.name}</div><div class="town-meta"><b>${fmt(t.population)}</b> habitantes · ${province}</div></div><div class="town-actions"><a class="mapbtn" href="${map}" target="_blank" rel="noopener noreferrer">MAPA ↗</a><a class="mapbtn secondary" href="${council}" target="_blank" rel="noopener noreferrer">AYUNTAMIENTO ↗</a></div></article>`;
+  }).join("");
+  section.querySelector(".empty").style.display = rows.length ? "none" : "block";
+  section.querySelector(".count").textContent = rows.length + (rows.length === 1 ? " municipio" : " municipios");
 }
 
-document.getElementById("q")
-  .addEventListener("input",render);
-
-document.getElementById("province")
-  .addEventListener("change",() => {
-
-    document.querySelectorAll("[data-tab]")
-      .forEach(b => {
-        b.classList.toggle(
-          "active",
-          b.dataset.tab === document.getElementById("province").value
-        );
-      });
-
-    render();
-  });
-
-document.getElementById("sort")
-  .addEventListener("change",render);
-
-document.querySelectorAll("[data-tab]")
-  .forEach(button => {
-
-    button.addEventListener("click",() => {
-
-      const value = button.dataset.tab;
-
-      document.getElementById("province").value = value;
-
-      document.querySelectorAll("[data-tab]")
-        .forEach(b => b.classList.toggle("active",b===button));
-
-      render();
-
-    });
-
-  });
-
-render();
-
+function showSection(id) {
+  current = id;
+  document.querySelectorAll(".panel").forEach(p => p.classList.toggle("active",p.id===id));
+  document.querySelectorAll(".tab").forEach(b => b.classList.toggle("active",b.dataset.go===id));
+  document.getElementById("navFooter").style.display = id === "inicio" ? "none" : "flex";
+  document.getElementById("drawer").classList.remove("open");
+  window.scrollTo({top:0,behavior:"smooth"});
+  updateNav();
+}
+function updateNav() {
+  const i = SECTIONS.findIndex(s => s[0]===current);
+  document.getElementById("prevBtn").disabled = i<=0;
+  document.getElementById("nextBtn").disabled = i>=SECTIONS.length-1;
+}
+function moveSection(delta) {
+  const i = SECTIONS.findIndex(s => s[0]===current);
+  const next = Math.max(0,Math.min(SECTIONS.length-1,i+delta));
+  showSection(SECTIONS[next][0]);
+}
+document.querySelectorAll(".tab").forEach(b => b.addEventListener("click",()=>showSection(b.dataset.go)));
+document.querySelectorAll(".filter").forEach(input => input.addEventListener("input",()=>renderProvince(input.dataset.province)));
+document.querySelectorAll(".sort").forEach(select => select.addEventListener("change",()=>renderProvince(select.dataset.province)));
+document.getElementById("prevBtn").addEventListener("click",()=>moveSection(-1));
+document.getElementById("nextBtn").addEventListener("click",()=>moveSection(1));
+document.getElementById("homeFloat").addEventListener("click",()=>showSection("inicio"));
+document.getElementById("upFloat").addEventListener("click",()=>window.scrollTo({top:0,behavior:"smooth"}));
+document.getElementById("indexBtn").addEventListener("click",()=>document.getElementById("drawer").classList.add("open"));
+document.getElementById("closeDrawer").addEventListener("click",()=>document.getElementById("drawer").classList.remove("open"));
+document.getElementById("drawer").addEventListener("click",e=>{if(e.target.id==="drawer")e.currentTarget.classList.remove("open");});
+document.getElementById("drawerLinks").innerHTML = SECTIONS.map(([id,label])=>`<button class="drawer-link" data-drawer-go="${id}">${label} <small>ABRIR →</small></button>`).join("");
+document.querySelectorAll("[data-drawer-go]").forEach(b=>b.addEventListener("click",()=>showSection(b.dataset.drawerGo)));
+Object.keys(DATA).forEach(renderProvince);
+showSection("inicio");
 </script>
-
 </body>
 </html>
